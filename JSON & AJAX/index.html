@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" id="names" class="inputs" data-name="names">
+    <input type="text" id="age" class="inputs" data-name="age">
+    <div id="output">
+        <table>
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Age</td>
+                </tr>
+            </thead>
+            <tbody id="tableRows"></tbody>
+        </table>
+    </div>
+    <button onclick="printDatabase()">Imprimir elementos</button>
+    <button onclick="addElements()">Añadir Elementos</button>
+
+
+
+    <script>
+        setInterval(function () {
+            printDatabase();
+        }, 1000);
+
+        function printDatabase() {
+            /* Ajax - Request */
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    /* document.getElementById("output").innerHTML = this.responseText; */
+                    document.getElementById('tableRows').innerHTML = '';
+
+                    if (this.responseText != '') {
+                        var info = JSON.parse(this.responseText);
+                        for (let i = 0; i < Object.keys(info).length; i++) {
+                            var row = document.createElement('tr');
+                            var cellName = document.createElement('td');
+                            var cellAge = document.createElement('td');
+                            cellName.innerHTML = info['Persona-' + i]['names'];
+                            row.appendChild(cellName);
+                            cellAge.innerHTML = info['Persona-' + i]['age'];
+                            row.appendChild(cellAge);
+
+                            document.getElementById('tableRows').appendChild(row);
+
+                        }
+                    }
+                }
+            };
+            xmlhttp.open("GET", "checkoutData.php", true);
+            xmlhttp.send();
+        }
+
+        function addElements() {
+            /* Recopilación de datos */
+            var data = new FormData();
+            var elements = document.getElementsByClassName('inputs');
+            for (let x = 0; x < elements.length; x++) {
+                data.append(
+                    elements[x].getAttribute('data-name'),
+                    elements[x].value
+                )
+            }
+            /* Ajax - Request */
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    alert('Se agregó');
+                }
+            };
+            xmlhttp.open("POST", "editData.php", true);
+            xmlhttp.send(data);
+        }
+
+
+
+    </script>
+</body>
+
+</html>
