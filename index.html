@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe Proyect</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<!-- To display "Game over" put class bg-game-over into body and display block p class game over -->
+<body class="">
+    <div class="header">
+        <h1 class="game-name">Tic Tac Toe</h1>
+        <p class="playing-display" style="display: block">Now is playing: <span id="playerActive">X</span></p>
+        <p class="game-over" style="display: none">
+            Game Over
+            <br>
+            <span>X Won!</span>
+        </p>
+    </div>
+
+
+    <div class="board playing-x" id="board">
+        <div class="column column-1">
+            <div class="cell row-1" id="cell-11"></div>
+            <div class="cell row-2" id="cell-21"></div>
+            <div class="cell row-3" id="cell-31"></div>
+        </div>
+        <div class="column column-2">
+            <div class="cell row-1" id="cell-12"></div>
+            <div class="cell row-2" id="cell-22"></div>
+            <div class="cell row-3" id="cell-32"></div>
+        </div>
+        <div class="column column-3">
+            <div class="cell row-1" id="cell-13"></div>
+            <div class="cell row-2" id="cell-23"></div>
+            <div class="cell row-3" id="cell-33"></div>
+        </div>
+    </div>
+
+
+    <script src="main.js"></script>
+</body>
+
+</html>
