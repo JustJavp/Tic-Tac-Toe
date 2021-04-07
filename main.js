@@ -1,50 +1,103 @@
-/* setInterval(function () {
-    printDatabase();
-}, 1000); */
-
-
-var board = document.getElementById('board');
+/* = = = = = = = = = = = = = 
+       Global variables
+ = = = = = = = = = = = = = */
 var playerActive = document.getElementById('playerActive');
-var winner = '';
+var board = document.getElementById('board');
 var boardMatrix = [['', '', ''], ['', '', ''], ['', '', '']];
-var i = 0;
+var winner = '';
+var playing = '';
 
-for (let x = 1; x <= 3; x++) {
-    for (let y = 1; y <= 3; y++) {
-        document.getElementById('cell-' + x + y).addEventListener('click', play);
-    }
+
+/* = = = = = = = = = = = = = 
+       Login & SetUp
+ = = = = = = = = = = = = = */
+function login() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            /* GET PLAYER ID */
+            playing = this.responseText;
+
+            /* ADD OR REMOVE PLAYERS ICON */
+            if (playing == 'O') {
+                board.classList.remove('playing-x');
+                board.classList.add('playing-o');
+
+            } else {
+                board.classList.remove('playing-o');
+                board.classList.add('playing-x');
+            }
+
+            /* BIND CELL WITH PLAY FUNCTION */
+            for (let x = 1; x <= 3; x++) {
+                for (let y = 1; y <= 3; y++) {
+                    document.getElementById('cell-' + x + y).addEventListener('click', play);
+                }
+            }
+
+        }
+    };
+    xhttp.open("POST", "PHP/login.php", true);
+    xhttp.send();
 }
 
+/* = = = = = = = = = = = = = 
+          Checkout
+ = = = = = = = = = = = = = */
+function checkout() {
+    var data = new FormData();
+    data.append('player', playing);
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            if (this.responseText != 'false') {
+                /* GET GAME.JSON INFO */
+                boardMatrix = JSON.parse(this.responseText);
+                /* FILLING BOARD */
+                for (let x = 1; x <= 3; x++) {
+                    for (let y = 1; y <= 3; y++) {
+                        var cell = document.getElementById('cell-' + x + y);
 
-function play() {
-    if (i == 9) {
-        return;
-    }
-    i++;
-    /* Cell move */
-    var cellMovement = this.id;
-    var playerIdentity = board.classList.contains('playing-x');
+                        if (boardMatrix[x - 1][y - 1] == 'X') {
+                            cell.classList.add('x');
+                        }
+                        else if (boardMatrix[x - 1][y - 1] == 'O') {
+                            cell.classList.add('o');
+                        }
 
-    var xValue = String(parseInt(cellMovement[5]) - 1);
-    var yValue = String(parseInt(cellMovement[6]) - 1);
-    boardMatrix[xValue][yValue] = playerActive.innerHTML;
+                    }
+                }
+                /* GET "Now is Playing" */
+                if (playerActive == 'X') {
+                    playerActive.innerHTML = 'O';
+                } else {
+                    playerActive.innerHTML = 'X';
+                }
+            }
+        }
+    };
+    xhttp.open("POST", "PHP/checkout.php", true);
+    xhttp.send(data);
+}
 
-    if (playerIdentity) {
-        this.classList.add('x');
-        playerActive.innerHTML = 'O';
-        board.classList.remove('playing-x');
-        board.classList.add('playing-o');
-    } else {
-        this.classList.add('o');
-        playerActive.innerHTML = 'X';
-        board.classList.remove('playing-o');
-        board.classList.add('playing-x');
-    }
+/* = = = = = = = = = = = = = 
+          Movement
+ = = = = = = = = = = = = = */
+function sendMove() {
+    var data = new FormData();
+    data.append('player', playing);
+    data.append('board', JSON.stringify(boardMatrix));
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            
+        }
+    };
+    xhttp.open("POST", "PHP/newMove.php", true);
+    xhttp.send(data);
+}
 
-    if (i == 9) {
-        winner = 'draw';
-    }
-
+function checkWin() {
     for (let x = 0; x < 3; x++) {
         if ((boardMatrix[x][0] == boardMatrix[x][1]) && (boardMatrix[x][1] == boardMatrix[x][2])) {
             if (boardMatrix[x][0] != '') {
@@ -65,8 +118,34 @@ function play() {
     if ((boardMatrix[0][2] == boardMatrix[1][1]) && (boardMatrix[2][0] == boardMatrix[1][1])) {
         winner = boardMatrix[0][2];
     }
+}
+
+function play() {
+    /* Can't play if anyone won or not your turn */
+    if (winner || (playing != playerActive.innerHTML)) {
+        return;
+    }
+
+    /* Cell move */
+    var cellMovement = this.id;
+    var xValue = String(parseInt(cellMovement[5]) - 1);
+    var yValue = String(parseInt(cellMovement[6]) - 1);
+    
+    boardMatrix[xValue][yValue] = playing;
+
+    if (playing == 'X') {
+        this.classList.add('x');
+        playerActive.innerHTML = 'O';
+    } else {
+        this.classList.add('o');
+        playerActive.innerHTML = 'X';
+    }
+
+    checkWin();
+
+    sendMove();
+    
     if (winner) {
-        console.log('se acabó esta ñerda...' + winner);
-        i = 9;
+        alert('Ganó ' + winner);
     }
 }
