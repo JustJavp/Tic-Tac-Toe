@@ -116,7 +116,10 @@ body {
     border-radius: 50%;
 }
 
-.playing-o .cell:not(.x):not(.o):hover::before,
+.playing-o .cell:not(.x):not(.o):hover::after,
+.playing-o .cell:not(.x):not(.o):hover::before {
+    border-color: var(--hover-color);
+}
 .playing-x .cell:not(.x):not(.o):hover::after,
 .playing-x .cell:not(.x):not(.o):hover::before {
     background-color: var(--hover-color);
