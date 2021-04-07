@@ -3,7 +3,7 @@
     $gameAddress = 'game.json';
     $turnAddress = 'turn.txt';
 
-    if (!(file_exists($gameFile))) {
+    if (!(file_exists($gameAddress))) {
         $gameFile = fopen($gameAddress, 'w');
         fclose($gameFile);
         $turnFile = fopen($turnAddress, 'w');

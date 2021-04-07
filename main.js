@@ -1,12 +1,20 @@
+login();
+
+function reloadPage() {
+    reload = setInterval(function () {
+        checkout();
+    }, 100);
+}
 /* = = = = = = = = = = = = = 
        Global variables
  = = = = = = = = = = = = = */
 var playerActive = document.getElementById('playerActive');
+var playerIcon = document.getElementById('playerIcon');
 var board = document.getElementById('board');
 var boardMatrix = [['', '', ''], ['', '', ''], ['', '', '']];
 var winner = '';
 var playing = '';
-
+var reload;
 
 /* = = = = = = = = = = = = = 
        Login & SetUp
@@ -20,12 +28,16 @@ function login() {
 
             /* ADD OR REMOVE PLAYERS ICON */
             if (playing == 'O') {
+                reloadPage();
                 board.classList.remove('playing-x');
                 board.classList.add('playing-o');
+                playerIcon.append('O')
+                
 
             } else {
                 board.classList.remove('playing-o');
                 board.classList.add('playing-x');
+                playerIcon.append('X')
             }
 
             /* BIND CELL WITH PLAY FUNCTION */
@@ -51,6 +63,7 @@ function checkout() {
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             if (this.responseText != 'false') {
+                clearInterval(reload);
                 /* GET GAME.JSON INFO */
                 boardMatrix = JSON.parse(this.responseText);
                 /* FILLING BOARD */
@@ -68,11 +81,10 @@ function checkout() {
                     }
                 }
                 /* GET "Now is Playing" */
-                if (playerActive == 'X') {
-                    playerActive.innerHTML = 'O';
-                } else {
-                    playerActive.innerHTML = 'X';
-                }
+                playerActive.innerHTML = playing;
+
+                
+                checkWin();
             }
         }
     };
@@ -90,7 +102,9 @@ function sendMove() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            
+            if (this.responseText != '') {
+                alert(this.responseText);
+            }
         }
     };
     xhttp.open("POST", "PHP/newMove.php", true);
@@ -118,14 +132,19 @@ function checkWin() {
     if ((boardMatrix[0][2] == boardMatrix[1][1]) && (boardMatrix[2][0] == boardMatrix[1][1])) {
         winner = boardMatrix[0][2];
     }
+    if (winner) {
+        alert('Ganó ' + winner);
+    }
 }
 
 function play() {
+    console.log(winner)
+    console.log(playerActive.innerHTML)
+    console.log(playing)
     /* Can't play if anyone won or not your turn */
     if (winner || (playing != playerActive.innerHTML)) {
         return;
     }
-
     /* Cell move */
     var cellMovement = this.id;
     var xValue = String(parseInt(cellMovement[5]) - 1);
@@ -144,8 +163,6 @@ function play() {
     checkWin();
 
     sendMove();
-    
-    if (winner) {
-        alert('Ganó ' + winner);
-    }
+
+    reloadPage();
 }

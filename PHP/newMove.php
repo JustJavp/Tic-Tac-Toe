@@ -10,9 +10,9 @@
     fclose($gameFile);
     $turnFile = fopen($turnAddress, 'w');
     if ($player == 'X') {
-        fwrite($turnAddress, 'O');
+        fwrite($turnFile, 'O');
     } else {
-        fwrite($turnAddress, 'X');
+        fwrite($turnFile, 'X');
     }
     fclose($turnFile);
 

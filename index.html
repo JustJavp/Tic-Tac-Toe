@@ -13,17 +13,17 @@
     <div class="header">
         <h1 class="game-name">Tic Tac Toe</h1>
         <p class="playing-display" style="display: block">Now is playing: <span id="playerActive">X</span></p>
+        <p>Tu eres: <span id="playerIcon"></span></p>
         <p class="game-over" style="display: none">
             Game Over
             <br>
             <span>X Won!</span>
 
             <form action="PHP/test.php" method="POST">
-                <button>Delete</button>
+                <button class="btn">REINICIAR PARTIDA</button>
             </form>
         </p>
     </div>
-
 
     <div class="board playing-x" id="board">
         <div class="column column-1">
