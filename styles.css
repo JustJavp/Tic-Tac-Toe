@@ -23,8 +23,8 @@ body {
 
 .menu, .game-over {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     background-color: #1f1f1fde;
     z-index: 1000;
 }
@@ -56,10 +56,12 @@ body {
 }
 .select-player-icon {
     justify-content: center;
-
     grid-column-gap: .5rem;
     display: grid;
     grid-template-columns: repeat(2, 50%);
+}
+.debug-btn {
+    margin-top: 1.2rem;
 }
 .select-player {
     text-transform: uppercase;
@@ -96,6 +98,9 @@ body {
     cursor: pointer;
     user-select: none;
     outline: none;
+}
+.btn-sm {
+    padding:1em 1.5em;
 }
 .btn:hover {
     color:#000000;

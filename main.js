@@ -1,3 +1,4 @@
+checkoutUsers();
 /* = = = = = = = = = = = = = 
        Global variables
  = = = = = = = = = = = = = */
@@ -14,11 +15,15 @@ var playing;
 var reload;
 var checkoutUsersReload;
 var inGame = false;
+var sendCooldown = false;
 
 
 /* = = = = = = = = = = = = = 
-          New Game
+      New Game & Debug
  = = = = = = = = = = = = = */
+ /* Debug btn */
+document.getElementsByClassName('debug')[0].addEventListener('click',newGameFunction);
+/* New Game btn */
 document.getElementById('newGame').addEventListener('click', newGameFunction);
 
 function newGameFunction() {
@@ -39,6 +44,10 @@ document.getElementsByClassName('select-x')[0].addEventListener('click', login);
 document.getElementsByClassName('select-o')[0].addEventListener('click', login);
 
 function login() {
+    if (inGame) {
+        return
+    };
+
     var data = new FormData;
     data.append('data-player', this.getAttribute('data-player'));
 
@@ -56,11 +65,11 @@ function login() {
                     reloadPage();
                     board.classList.remove('playing-x');
                     board.classList.add('playing-o');
-                    playerIcon.append('O')
+                    playerIcon.innerHTML = 'O';
                 } else {
                     board.classList.remove('playing-o');
                     board.classList.add('playing-x');
-                    playerIcon.append('X')
+                    playerIcon.innerHTML = 'X';
                 }
 
                 /* BIND CELL WITH PLAY FUNCTION */
@@ -139,11 +148,12 @@ function checkout() {
                 for (let x = 1; x <= 3; x++) {
                     for (let y = 1; y <= 3; y++) {
                         var cell = document.getElementById('cell-' + x + y);
-
+                        cell.classList.remove('x');
+                        cell.classList.remove('o');
                         if (boardMatrix[x - 1][y - 1] == 'X') {
                             cell.classList.add('x');
                         }
-                        else if (boardMatrix[x - 1][y - 1] == 'O') {
+                        if (boardMatrix[x - 1][y - 1] == 'O') {
                             cell.classList.add('o');
                         }
 
@@ -172,6 +182,7 @@ function sendMove() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
+            sendCooldown = false;
             if (this.responseText != '') {
                 alert(this.responseText);
             }
@@ -216,7 +227,10 @@ function checkWin() {
     }
     if (winner) {
         gameOver.style.display = 'block';
-        winnerId.append(winner + ' won!');
+        winnerId.innerHTML = winner + ' won!';
+        if (winner == 'Draw') {
+            winnerId.innerHTML = 'Draw';
+        }
         clearInterval(reload);
     }
 }
@@ -226,10 +240,19 @@ function play() {
     if (winner || (playing != playerActive.innerHTML)) {
         return;
     }
+    if (sendCooldown) {
+        return;
+    }
+    sendCooldown = true;
     /* Cell move */
     var cellMovement = this.id;
     var xValue = String(parseInt(cellMovement[5]) - 1);
     var yValue = String(parseInt(cellMovement[6]) - 1);
+
+    if (boardMatrix[xValue][yValue] != '') {
+        sendCooldown = false;
+        return;
+    }
 
     boardMatrix[xValue][yValue] = playing;
 
@@ -254,5 +277,5 @@ function play() {
 function reloadPage() {
     reload = setInterval(function () {
         checkout();
-    }, 100);
+    }, 1000);
 }
