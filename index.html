@@ -9,20 +9,16 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <!-- To display "Game over" put class bg-game-over into body and display block p class game over -->
-<body class="">
+<body class="" id="body">
     <div class="header">
         <h1 class="game-name">Tic Tac Toe</h1>
         <p class="playing-display" style="display: block">Now is playing: <span id="playerActive">X</span></p>
         <p>Tu eres: <span id="playerIcon"></span></p>
-        <p class="game-over" style="display: none">
-            Game Over
-            <br>
-            <span>X Won!</span>
-
-            <form action="PHP/test.php" method="POST">
-                <button class="btn">REINICIAR PARTIDA</button>
-            </form>
-        </p>
+        <div class="game-over" style="display: none" id="gameOver">
+            <span>Game Over!</span>
+            <p id="winnerId"></p>
+            <button class="btn" id="newGame">NUEVA PARTIDA</button>
+        </div>
     </div>
 
     <div class="board playing-x" id="board">

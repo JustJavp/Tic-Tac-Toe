@@ -1,7 +1,7 @@
 <?php 
 
-    $gameAddress = 'game.json';
-    $turnAddress = 'turn.txt';
+    $gameAddress = '../databases/game.json';
+    $turnAddress = '../databases/turn.txt';
     $data = $_POST['board'];
     $player = $_POST['player'];
 

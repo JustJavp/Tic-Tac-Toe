@@ -1,0 +1,2 @@
+Is pending Game Over AJAX - PHP
+Auto open another game if other player push "Restart Game"

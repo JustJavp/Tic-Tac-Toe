@@ -37,7 +37,6 @@ body {
 .game-over {
     font-size: 5rem;
     color: white;
-    text-transform: uppercase;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -45,8 +44,11 @@ body {
     z-index: 1000;
 }
 .game-over span {
-    text-transform: initial;
-    font-size: 3.5rem;
+    text-transform: uppercase;
+}
+.game-over p {
+    display: block;
+    font-size: 2.5rem;
 }
 .bg-game-over {
     background-color: #333;
@@ -56,7 +58,6 @@ body {
     display: inline-block;
     padding:1.35em 2.2em;
     border:0.1em solid #FFFFFF;
-    margin:1rem 0.3em 0.3em 0;
     border-radius:0.12em;
     box-sizing: border-box;
     text-decoration:none;

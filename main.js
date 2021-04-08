@@ -10,11 +10,31 @@ function reloadPage() {
  = = = = = = = = = = = = = */
 var playerActive = document.getElementById('playerActive');
 var playerIcon = document.getElementById('playerIcon');
+var showGameOverBackground = document.getElementById('body');
+var gameOver = document.getElementById('gameOver');
+var winnerId = document.getElementById('winnerId');
 var board = document.getElementById('board');
 var boardMatrix = [['', '', ''], ['', '', ''], ['', '', '']];
-var winner = '';
-var playing = '';
+var winner;
+var playing;
 var reload;
+
+
+/* = = = = = = = = = = = = = 
+          New Game
+ = = = = = = = = = = = = = */
+ document.getElementById('newGame').addEventListener('click', newGameFunction);
+ function newGameFunction() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+
+
+        }
+    };
+    xhttp.open("POST", "PHP/gameOver.php", true);
+    xhttp.send();
+ }
 
 /* = = = = = = = = = = = = = 
        Login & SetUp
@@ -132,15 +152,16 @@ function checkWin() {
     if ((boardMatrix[0][2] == boardMatrix[1][1]) && (boardMatrix[2][0] == boardMatrix[1][1])) {
         winner = boardMatrix[0][2];
     }
+    console.log(winner);
     if (winner) {
-        alert('Ganó ' + winner);
+        gameOver.style.display = 'block';
+        showGameOverBackground.classList.add('bg-game-over');
+        winnerId.append(winner + ' wons!')
+        
     }
 }
 
 function play() {
-    console.log(winner)
-    console.log(playerActive.innerHTML)
-    console.log(playing)
     /* Can't play if anyone won or not your turn */
     if (winner || (playing != playerActive.innerHTML)) {
         return;
