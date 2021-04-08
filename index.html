@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -8,17 +8,42 @@
     <title>Tic Tac Toe Proyect</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<!-- To display "Game over" put class bg-game-over into body and display block p class game over -->
-<body class="" id="body">
+
+<body id="body">
+
+
+    <div class="menu" style="display: block;" id="gameMenu">
+        <div class="menu-container">
+            <div class="menu-header">
+                <p class="card-header">Welcome to the Tic Tac Toe</p>
+                <p>...a simple multiplayer game to play with friends</p>
+            </div>
+            <div class="menu-config">
+                <!-- .selected class -->
+                <div class="select-player-icon">
+                    <button class="select-player select-x btn" data-player="X">Play with X</button>
+                    <button class="select-player select-o btn" data-player="O">Play with O</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="game-over" style="display: none" id="gameOver">
+        <div class="game-over-container">
+            <div class="game-over-text">
+                <p class="card-header">Game Over!</p>
+                <p id="winnerId"></p>
+            </div>
+            <div class="newGame">
+                <button class="btn" id="newGame">NEW GAME</button>
+            </div>
+        </div>
+    </div>
+
     <div class="header">
         <h1 class="game-name">Tic Tac Toe</h1>
         <p class="playing-display" style="display: block">Now is playing: <span id="playerActive">X</span></p>
         <p>You're playing as: <span id="playerIcon"></span></p>
-        <div class="game-over" style="display: none" id="gameOver">
-            <span>Game Over!</span>
-            <p id="winnerId"></p>
-            <button class="btn" id="newGame">NUEVA PARTIDA</button>
-        </div>
     </div>
 
     <div class="board playing-x" id="board">
