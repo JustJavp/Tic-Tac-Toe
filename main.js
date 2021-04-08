@@ -24,11 +24,12 @@ var reload;
           New Game
  = = = = = = = = = = = = = */
  document.getElementById('newGame').addEventListener('click', newGameFunction);
+
  function newGameFunction() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-
+            location.reload();
 
         }
     };
@@ -85,6 +86,7 @@ function checkout() {
             if (this.responseText != 'false') {
                 clearInterval(reload);
                 /* GET GAME.JSON INFO */
+                console.log(this.responseText);
                 boardMatrix = JSON.parse(this.responseText);
                 /* FILLING BOARD */
                 for (let x = 1; x <= 3; x++) {
@@ -132,6 +134,18 @@ function sendMove() {
 }
 
 function checkWin() {
+    var emptyCell = true; 
+    for (let x = 0; x < 3; x++) {
+        for (let y = 0; y < 3; y++) {
+            if (boardMatrix[x][y] == '') {
+                emptyCell = false;
+                break;
+            }
+        }
+    }
+    if (emptyCell) {
+        winner = 'Draw';
+    }
     for (let x = 0; x < 3; x++) {
         if ((boardMatrix[x][0] == boardMatrix[x][1]) && (boardMatrix[x][1] == boardMatrix[x][2])) {
             if (boardMatrix[x][0] != '') {
@@ -152,12 +166,10 @@ function checkWin() {
     if ((boardMatrix[0][2] == boardMatrix[1][1]) && (boardMatrix[2][0] == boardMatrix[1][1])) {
         winner = boardMatrix[0][2];
     }
-    console.log(winner);
     if (winner) {
         gameOver.style.display = 'block';
         showGameOverBackground.classList.add('bg-game-over');
-        winnerId.append(winner + ' wons!')
-        
+        winnerId.append(winner + ' won!');
     }
 }
 
